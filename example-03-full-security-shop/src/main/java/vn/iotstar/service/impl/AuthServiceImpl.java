@@ -3,6 +3,7 @@ package vn.iotstar.service.impl;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import vn.iotstar.dto.RegisterDTO;
 import vn.iotstar.entity.OtpType;
 import vn.iotstar.entity.Role;
@@ -50,6 +51,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    @Transactional(noRollbackFor = IllegalArgumentException.class)
     public void verifyRegistration(String email, String otp) {
         otpService.verify(email, OtpType.REGISTER, otp);
         User user = userRepository.findByEmail(email)
@@ -72,6 +74,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    @Transactional(noRollbackFor = IllegalArgumentException.class)
     public void resetPassword(String email, String otp, String newPassword, String confirmPassword) {
         if (!newPassword.equals(confirmPassword)) {
             throw new IllegalArgumentException("Mật khẩu xác nhận không khớp.");

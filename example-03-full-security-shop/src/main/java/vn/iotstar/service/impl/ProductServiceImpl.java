@@ -33,9 +33,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Page<ProductDTO> findAll(String keyword, int page, int size, Long ownerId) {
+        String query = keyword == null ? "" : keyword;
         Page<Product> products = ownerId == null
-                ? productRepository.search(keyword == null ? "" : keyword, PageRequest.of(page, size))
-                : productRepository.findByUserId(ownerId, PageRequest.of(page, size));
+                ? productRepository.search(query, PageRequest.of(page, size))
+                : productRepository.searchByUser(ownerId, query, PageRequest.of(page, size));
         return products.map(productMapper::toDto);
     }
 

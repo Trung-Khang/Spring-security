@@ -1,0 +1,8 @@
+<!doctype html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/layout}">
+<head><title>Có lỗi xảy ra</title></head>
+<body><section layout:fragment="content" class="form-card">
+    <h1>Không thể hoàn tất yêu cầu</h1>
+    <p class="alert error" th:text="${message}">Đã có lỗi xảy ra.</p>
+    <a class="button" th:href="@{/}">Về trang chủ</a>
+</section></body></html>

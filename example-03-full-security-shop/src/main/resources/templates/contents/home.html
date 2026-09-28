@@ -1,0 +1,9 @@
+<!doctype html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/layout}">
+<head><title>Trang chủ</title></head>
+<body><section layout:fragment="content" class="hero">
+    <p class="eyebrow">SPRING SECURITY · SESSION AUTHENTICATION</p>
+    <h1>Chào mừng đến IOTSTAR Shop</h1>
+    <p>Đăng ký tài khoản, xác nhận email bằng OTP và bắt đầu quản lý sản phẩm.</p>
+    <div class="actions"><a class="button" th:href="@{/register}">Tạo tài khoản</a><a class="button secondary" th:href="@{/products}">Xem sản phẩm</a></div>
+</section></body></html>

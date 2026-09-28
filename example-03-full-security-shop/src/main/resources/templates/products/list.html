@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/layout}">
+<head><title>Sản phẩm</title></head>
+<body><section layout:fragment="content">
+    <div class="page-heading"><h1>Sản phẩm</h1><a class="button" th:href="@{/products/new}">Thêm sản phẩm</a></div>
+    <form class="search" th:action="@{/products}" method="get"><input name="keyword" th:value="${keyword}" placeholder="Tìm sản phẩm"><button class="button" type="submit">Tìm</button></form>
+    <div class="product-grid"><article class="card product" th:each="product : ${products.content}">
+        <img th:src="${#strings.isEmpty(product.imageUrl) ? '/images/avatar-default.svg' : product.imageUrl}" alt="Ảnh sản phẩm">
+        <h2 th:text="${product.name}">Sản phẩm</h2><p th:text="${product.description}"></p><strong th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + ' ₫'"></strong><small th:text="${product.userName}"></small>
+        <div class="row-actions"><a th:href="@{/products/{id}/edit(id=${product.id})}">Sửa</a><form th:action="@{/products/{id}/delete(id=${product.id})}" method="post"><button class="link-button danger" type="submit">Xóa</button></form></div>
+    </article></div>
+    <nav class="pagination"><a th:if="${products.hasPrevious()}" th:href="@{/products(page=${products.number - 1},keyword=${keyword})}">Trước</a><span th:text="|Trang ${products.number + 1} / ${products.totalPages}|"></span><a th:if="${products.hasNext()}" th:href="@{/products(page=${products.number + 1},keyword=${keyword})}">Sau</a></nav>
+</section></body></html>

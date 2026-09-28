@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/layout}">
+<head><title>Đăng ký</title></head>
+<body><section layout:fragment="content" class="form-card">
+    <h1>Tạo tài khoản</h1><p class="alert error" th:if="${error}" th:text="${error}"></p>
+    <form th:action="@{/register}" th:object="${registerDTO}" method="post">
+        <label>Username</label><input th:field="*{username}" required><small th:errors="*{username}"></small>
+        <label>Email</label><input th:field="*{email}" type="email" required><small th:errors="*{email}"></small>
+        <label>Họ và tên</label><input th:field="*{fullName}" required><small th:errors="*{fullName}"></small>
+        <label>Mật khẩu (ít nhất 8 ký tự)</label><input th:field="*{password}" type="password" required>
+        <label>Xác nhận mật khẩu</label><input th:field="*{confirmPassword}" type="password" required>
+        <button class="button full" type="submit">Đăng ký và gửi OTP</button>
+    </form>
+</section></body></html>

@@ -1,0 +1,11 @@
+<!doctype html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/layout}">
+<head><title>Dashboard</title></head>
+<body><section layout:fragment="content">
+    <h1>Dashboard</h1>
+    <div class="stats"><article class="card"><span>Người dùng</span><strong th:text="${userCount}">0</strong></article><article class="card"><span>Sản phẩm</span><strong th:text="${productCount}">0</strong></article></div>
+    <h2>Số sản phẩm theo người dùng</h2>
+    <div class="table-wrap"><table><thead><tr><th>Tài khoản</th><th>Họ tên</th><th>Email</th><th>Sản phẩm</th></tr></thead><tbody>
+    <tr th:each="user : ${users.content}"><td th:text="${user.username}"></td><td th:text="${user.fullName}"></td><td th:text="${user.email}"></td><td th:text="${user.productCount}"></td></tr>
+    </tbody></table></div>
+</section></body></html>

@@ -19,6 +19,6 @@ mvn test
 mvn spring-boot:run
 ```
 
-Ví dụ 1 chạy mặc định ở cổng `8088`; Ví dụ 2 ở cổng `8081`. Cả hai dùng H2 in-memory khi chưa tạo `.env`. Để kết nối SQL Server, sao chép `.env.example` thành `.env` và điền thông tin cục bộ; không commit `.env`.
+Ví dụ 1 chạy mặc định ở cổng `8088`; Ví dụ 2 ở cổng `8081`. Cả hai đóng gói H2 ở runtime và dùng H2 in-memory khi chưa tạo `.env`. Để kết nối SQL Server, sao chép `.env.example` thành `.env`, dùng `DB_DRIVER=com.microsoft.sqlserver.jdbc.SQLServerDriver` và `DDL_AUTO=update`; không commit `.env`.
 
 Ví dụ 3 trong tài liệu chỉ là mô tả yêu cầu và cần tài liệu DOCX bổ sung nên chưa triển khai.

@@ -1,4 +1,4 @@
-Spring-security_Bài tập lập trình WEB ngày 28 tháng 9 năm 2026
+# Spring-security_Bài tập lập trình WEB ngày 28 tháng 9 năm 2026
 
 Hai ví dụ Spring Security được triển khai độc lập:
 
@@ -11,11 +11,11 @@ Mỗi project có README riêng, cấu hình mẫu trong `.env.example`, và tes
 
 ```powershell
 cd example-01-email-login
-mvn test
+mvn clean test
 mvn spring-boot:run
 
 cd ../example-02-custom-login
-mvn test
+mvn clean test
 mvn spring-boot:run
 ```
 

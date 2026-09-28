@@ -174,6 +174,31 @@ class SecurityWorkflowTest {
     }
 
     @Test
+    void registrationAndOtpFormsCompleteThePublicMvcFlow() throws Exception {
+        String username = "mvc-" + UUID.randomUUID();
+        String email = "mvc-" + UUID.randomUUID() + "@example.com";
+        mockMvc.perform(post("/register").with(csrf())
+                        .param("username", username)
+                        .param("email", email)
+                        .param("fullName", "MVC Registration")
+                        .param("password", TEST_PASSWORD)
+                        .param("confirmPassword", TEST_PASSWORD))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers
+                        .redirectedUrl("/verify-otp?email=" + email));
+
+        String code = capturedOtp(email, "đăng ký");
+        mockMvc.perform(post("/verify-otp").with(csrf())
+                        .param("email", email)
+                        .param("otp", code)
+                        .param("type", "REGISTER"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers
+                        .redirectedUrl("/login?verified=true"));
+        assertTrue(userRepository.findByEmail(email).orElseThrow().isEnabled());
+    }
+
+    @Test
     void registrationRejectsDuplicateAccountsAndMismatchedPasswords() {
         User existing = createUser("ROLE_USER");
         RegisterDTO duplicate = new RegisterDTO();
@@ -280,6 +305,25 @@ class SecurityWorkflowTest {
         assertEquals("https://images.example/product.png", created.getImageUrl());
         productService.delete(created.getId(), owner.getId(), false);
         verify(cloudinaryService).delete("products/test-image");
+    }
+
+    @Test
+    void authenticatedProductPageRendersCustomPrincipalAndFallbackImage() throws Exception {
+        User owner = createUser("ROLE_USER");
+        ProductDTO dto = new ProductDTO();
+        dto.setName("Visible fallback product");
+        dto.setDescription("No remote image");
+        dto.setPrice(new BigDecimal("7.00"));
+        productService.create(dto, null, owner.getId());
+        CustomUserDetails principal = (CustomUserDetails) userDetailsService.loadUserByUsername(owner.getUsername());
+
+        mockMvc.perform(get("/products").with(
+                        org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user(principal)))
+                .andExpect(status().isOk())
+                .andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers.content()
+                        .string(org.hamcrest.Matchers.containsString(owner.getFullName())))
+                .andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers.content()
+                        .string(org.hamcrest.Matchers.containsString("avatar-default.svg")));
     }
 
     @Test

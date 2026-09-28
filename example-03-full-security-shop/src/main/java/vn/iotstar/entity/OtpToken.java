@@ -39,7 +39,7 @@ public class OtpToken {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    protected OtpToken() {
+    public OtpToken() {
     }
 
     public Long getId() { return id; }

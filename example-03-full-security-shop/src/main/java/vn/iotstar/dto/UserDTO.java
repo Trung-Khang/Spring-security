@@ -8,6 +8,7 @@ public class UserDTO {
     @NotBlank private String username;
     @NotBlank @Email private String email;
     @NotBlank private String fullName;
+    private String password;
     private String roleName;
     private boolean enabled;
     private long productCount;
@@ -20,6 +21,8 @@ public class UserDTO {
     public void setEmail(String email) { this.email = email; }
     public String getFullName() { return fullName; }
     public void setFullName(String fullName) { this.fullName = fullName; }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
     public String getRoleName() { return roleName; }
     public void setRoleName(String roleName) { this.roleName = roleName; }
     public boolean isEnabled() { return enabled; }

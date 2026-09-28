@@ -9,5 +9,6 @@ import vn.iotstar.entity.User;
 public interface UserMapper {
     @Mapping(target = "roleName", source = "role.name")
     @Mapping(target = "productCount", ignore = true)
+    @Mapping(target = "password", ignore = true)
     UserDTO toDto(User user);
 }

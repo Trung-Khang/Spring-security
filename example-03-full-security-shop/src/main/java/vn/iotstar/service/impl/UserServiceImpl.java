@@ -2,6 +2,7 @@ package vn.iotstar.service.impl;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vn.iotstar.dto.UserDTO;
@@ -18,11 +19,14 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, UserMapper userMapper) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, UserMapper userMapper,
+            PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.userMapper = userMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -41,6 +45,28 @@ public class UserServiceImpl implements UserService {
         UserDTO dto = userMapper.toDto(user);
         dto.setProductCount(userRepository.countProductsByUserId(id));
         return dto;
+    }
+
+    @Override
+    @Transactional
+    public UserDTO create(UserDTO dto) {
+        if (dto.getPassword() == null || dto.getPassword().length() < 8) {
+            throw new IllegalArgumentException("Mật khẩu phải có ít nhất 8 ký tự.");
+        }
+        if (userRepository.existsByUsername(dto.getUsername()) || userRepository.existsByEmail(dto.getEmail())) {
+            throw new IllegalArgumentException("Username hoặc email đã được sử dụng.");
+        }
+        String roleName = dto.getRoleName() == null ? "ROLE_USER" : dto.getRoleName();
+        Role role = roleRepository.findByName(roleName)
+                .orElseThrow(() -> new IllegalArgumentException("Role không tồn tại."));
+        User user = new User();
+        user.setUsername(dto.getUsername());
+        user.setEmail(dto.getEmail());
+        user.setFullName(dto.getFullName());
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        user.setRole(role);
+        user.setEnabled(dto.isEnabled());
+        return userMapper.toDto(userRepository.save(user));
     }
 
     @Override
